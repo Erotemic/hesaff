@@ -2,10 +2,10 @@
 
  # https://docs.opencv.org/master/d7/d9f/tutorial_linux_install.html
 
-sudo apt-get install build-essential cmake git
+sudo apt-get install -y build-essential cmake git
 #sudo apt-get install python3-dev python3-numpy
-sudo apt-get install libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
-sudo apt-get install libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev
+sudo apt-get install -y libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
+sudo apt-get install -y libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libdc1394-22-dev
 
 
 cd $HOME/code
@@ -54,14 +54,14 @@ echo "LOCAL_PREFIX = $LOCAL_PREFIX"
 # git pull
 # cd ..
 # git pull
-build_dname=build-py3
+build_dname=build
 REPO_DIR=$HOME/code/opencv
 echo "REPO_DIR = $REPO_DIR"
 mkdir -p $REPO_DIR/$build_dname
 cd $REPO_DIR/$build_dname
 
 
-cd $HOME/code/opencv/build-py3
+cd $HOME/code/opencv/build
 cmake -G "Ninja" \
     -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=$HOME/.local \

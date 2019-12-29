@@ -107,15 +107,36 @@ message(STATUS "OpenMP_EXE_LINKER_FLAGS = ${OpenMP_EXE_LINKER_FLAGS}")
 message(STATUS "OpenCV_INCLUDE_DIR = ${OpenCV_INCLUDE_DIR}")
 message(STATUS "OpenCV_LIBRARIES = ${OpenCV_LIBRARIES}")
 
-add_library(hesaff SHARED ${SOURCE_FILES})
+# Use MODULE instead of SHARED for windows
+#add_library(hesaff SHARED ${SOURCE_FILES})
+add_library(hesaff MODULE ${SOURCE_FILES})
+
+
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    # Set the DLLEXPORT variable to export symbols
+    target_compile_definitions(hesaff PRIVATE HESAFF_WIN_EXPORT)
+endif()
+
+
 
 target_include_directories(hesaff PRIVATE ${OpenCV_INCLUDE_DIR})
 
 #######################################
 target_link_libraries(hesaff PRIVATE ${OpenCV_LIBRARIES})
 
-file(RELATIVE_PATH _install_dest "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}")
-install(TARGETS ${module_name} LIBRARY DESTINATION "${_install_dest}")
+#file(RELATIVE_PATH _install_dest "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}")
+#message(STATUS "CMAKE_CURRENT_SOURCE_DIR = ${CMAKE_CURRENT_SOURCE_DIR}")
+#message(STATUS "CMAKE_SOURCE_DIR = ${CMAKE_SOURCE_DIR}")
+#message(STATUS "_install_dest = ${_install_dest}")
+#install(TARGETS hesaff LIBRARY DESTINATION "${_install_dest}")
+
+# I think: An install target is required so scikit-build knows where the binaries are
+# https://github.com/scikit-build/scikit-build/issues/434
+# Note: if the target is not referenced by package_data in setup.py then the
+# lib will be installed as a data file and not a package file.
+install(TARGETS hesaff LIBRARY DESTINATION "pyhesaff")
+
 #message(STATUS CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE})
 
 
